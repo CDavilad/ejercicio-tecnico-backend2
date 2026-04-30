@@ -1,0 +1,515 @@
+{
+  "info": {
+    "name": "Banco Microservicios API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección completa para validar F1-F6. Ejecutar la carpeta '00 - Flujo Completo PDF' en orden para reproducir los casos de uso del enunciado."
+  },
+  "variable": [
+    { "key": "base_clientes", "value": "http://localhost:8080/api" },
+    { "key": "base_cuentas",  "value": "http://localhost:8081/api" },
+    { "key": "id_jose",       "value": "" },
+    { "key": "id_marianela",  "value": "" },
+    { "key": "id_juan",       "value": "" }
+  ],
+  "item": [
+    {
+      "name": "00 - Flujo Completo PDF (ejecutar en orden)",
+      "item": [
+        {
+          "name": "1a. Crear cliente Jose Lema",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Nombre correcto', () => pm.expect(body.nombre).to.eql('Jose Lema'));",
+            "pm.test('Estado activo', () => pm.expect(body.estado).to.be.true);",
+            "pm.collectionVariables.set('id_jose', body.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 30,\n  \"identificacion\": \"1000000001\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"clienteId\": \"jose.lema\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}" }
+          }
+        },
+        {
+          "name": "1b. Crear cliente Marianela Montalvo",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Nombre correcto', () => pm.expect(body.nombre).to.eql('Marianela Montalvo'));",
+            "pm.collectionVariables.set('id_marianela', body.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Marianela Montalvo\",\n  \"genero\": \"Femenino\",\n  \"edad\": 28,\n  \"identificacion\": \"1000000002\",\n  \"direccion\": \"Amazonas y NNUU\",\n  \"telefono\": \"097548965\",\n  \"clienteId\": \"marianela.montalvo\",\n  \"contrasena\": \"5678\",\n  \"estado\": true\n}" }
+          }
+        },
+        {
+          "name": "1c. Crear cliente Juan Osorio",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Nombre correcto', () => pm.expect(body.nombre).to.eql('Juan Osorio'));",
+            "pm.collectionVariables.set('id_juan', body.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Juan Osorio\",\n  \"genero\": \"Masculino\",\n  \"edad\": 35,\n  \"identificacion\": \"1000000003\",\n  \"direccion\": \"13 junio y Equinoccial\",\n  \"telefono\": \"098874587\",\n  \"clienteId\": \"juan.osorio\",\n  \"contrasena\": \"1245\",\n  \"estado\": true\n}" }
+          }
+        },
+        {
+          "name": "2a. Crear cuenta 478758 Ahorro - Jose Lema (saldo 2000)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Numero cuenta correcto', () => pm.expect(body.numeroCuenta).to.eql('478758'));",
+            "pm.test('Saldo disponible igual a saldo inicial', () => pm.expect(body.saldoDisponible).to.eql(2000));",
+            "pm.collectionVariables.set('id_cuenta_478758', body.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000,\n  \"estado\": true,\n  \"clienteId\": \"jose.lema\"\n}" }
+          }
+        },
+        {
+          "name": "2b. Crear cuenta 225487 Corriente - Marianela (saldo 100)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.collectionVariables.set('id_cuenta_225487', pm.response.json().id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"225487\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 100,\n  \"estado\": true,\n  \"clienteId\": \"marianela.montalvo\"\n}" }
+          }
+        },
+        {
+          "name": "2c. Crear cuenta 495878 Ahorros - Juan (saldo 0)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.collectionVariables.set('id_cuenta_495878', pm.response.json().id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"495878\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 0,\n  \"estado\": true,\n  \"clienteId\": \"juan.osorio\"\n}" }
+          }
+        },
+        {
+          "name": "2d. Crear cuenta 496825 Ahorros - Marianela (saldo 540)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.collectionVariables.set('id_cuenta_496825', pm.response.json().id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"496825\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 540,\n  \"estado\": true,\n  \"clienteId\": \"marianela.montalvo\"\n}" }
+          }
+        },
+        {
+          "name": "3. Crear cuenta 585545 Corriente - Jose Lema (saldo 1000)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.test('ClienteId correcto', () => pm.expect(pm.response.json().clienteId).to.eql('jose.lema'));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"585545\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 1000,\n  \"estado\": true,\n  \"clienteId\": \"jose.lema\"\n}" }
+          }
+        },
+        {
+          "name": "4a. Movimiento: Retiro 575 de cuenta 478758 (F2+F3)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Tipo Retiro', () => pm.expect(body.tipoMovimiento).to.eql('Retiro'));",
+            "pm.test('Saldo resultante correcto (2000-575=1425)', () => pm.expect(body.saldo).to.eql(1425));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"valor\": -575\n}" }
+          }
+        },
+        {
+          "name": "4b. Movimiento: Deposito 600 en cuenta 225487",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Tipo Deposito', () => pm.expect(body.tipoMovimiento).to.eql('Deposito'));",
+            "pm.test('Saldo resultante correcto (100+600=700)', () => pm.expect(body.saldo).to.eql(700));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"225487\",\n  \"valor\": 600\n}" }
+          }
+        },
+        {
+          "name": "4c. Movimiento: Deposito 150 en cuenta 495878",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.test('Saldo resultante correcto (0+150=150)', () => pm.expect(pm.response.json().saldo).to.eql(150));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"495878\",\n  \"valor\": 150\n}" }
+          }
+        },
+        {
+          "name": "4d. Movimiento: Retiro 540 de cuenta 496825",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.test('Saldo resultante correcto (540-540=0)', () => pm.expect(pm.response.json().saldo).to.eql(0));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"496825\",\n  \"valor\": -540\n}" }
+          }
+        },
+        {
+          "name": "F3 - Saldo no disponible (debe retornar 400)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 400 Saldo no disponible', () => pm.response.to.have.status(400));",
+            "pm.test('Mensaje correcto', () => pm.expect(pm.response.json().message).to.eql('Saldo no disponible'));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"valor\": -99999\n}" }
+          }
+        },
+        {
+          "name": "F4 - Reporte Marianela (fecha de hoy)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+            "pm.test('Contiene movimientos de Marianela', () => {",
+            "  const items = pm.response.json();",
+            "  pm.expect(items.length).to.be.greaterThan(0);",
+            "  items.forEach(i => pm.expect(i.cliente).to.include('Marianela'));",
+            "});"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_cuentas}}/reportes?clienteId=marianela.montalvo&fechaInicio={{$isoTimestamp}}&fechaFin={{$isoTimestamp}}",
+              "host": ["{{base_cuentas}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "clienteId",   "value": "marianela.montalvo" },
+                { "key": "fechaInicio", "value": "2026-04-01" },
+                { "key": "fechaFin",    "value": "2026-12-31" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - F1 CRUD Clientes",
+      "item": [
+        {
+          "name": "GET Listar todos los clientes",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_clientes}}/clientes" }
+        },
+        {
+          "name": "GET Cliente por ID",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Tiene id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_clientes}}/clientes/{{id_jose}}" }
+        },
+        {
+          "name": "GET Cliente inexistente (debe ser 404)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 404', () => pm.response.to.have.status(404));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_clientes}}/clientes/99999" }
+        },
+        {
+          "name": "PUT Actualizar cliente completo",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Nombre actualizado', () => pm.expect(pm.response.json().nombre).to.eql('Jose Lema Modificado'));"
+          ]}}],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes/{{id_jose}}",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Jose Lema Modificado\",\n  \"genero\": \"Masculino\",\n  \"edad\": 31,\n  \"identificacion\": \"1000000001\",\n  \"direccion\": \"Nueva Direccion 123\",\n  \"telefono\": \"098254785\",\n  \"clienteId\": \"jose.lema\",\n  \"contrasena\": \"nuevapass\",\n  \"estado\": true\n}" }
+          }
+        },
+        {
+          "name": "PATCH Actualizar estado cliente",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Estado desactivado', () => pm.expect(pm.response.json().estado).to.be.false);"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes/{{id_juan}}",
+            "body": { "mode": "raw", "raw": "{\n  \"estado\": false\n}" }
+          }
+        },
+        {
+          "name": "POST Crear cliente - Validación campos vacíos (400)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 400 por validación', () => pm.response.to.have.status(400));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"\",\n  \"identificacion\": \"\",\n  \"clienteId\": \"\",\n  \"contrasena\": \"\",\n  \"estado\": null\n}" }
+          }
+        },
+        {
+          "name": "POST Crear cliente duplicado (409)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 409 duplicado', () => pm.response.to.have.status(409));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_clientes}}/clientes",
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 30,\n  \"identificacion\": \"1000000001\",\n  \"direccion\": \"Otavalo\",\n  \"telefono\": \"098254785\",\n  \"clienteId\": \"jose.lema\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - F1 CRUD Cuentas",
+      "item": [
+        {
+          "name": "GET Listar todas las cuentas",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_cuentas}}/cuentas" }
+        },
+        {
+          "name": "GET Cuenta por ID",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Tiene numeroCuenta', () => pm.expect(pm.response.json()).to.have.property('numeroCuenta'));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_cuentas}}/cuentas/{{id_cuenta_478758}}" }
+        },
+        {
+          "name": "GET Cuenta inexistente (404)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 404', () => pm.response.to.have.status(404));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_cuentas}}/cuentas/99999" }
+        },
+        {
+          "name": "PUT Actualizar cuenta",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas/{{id_cuenta_478758}}",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Ahorro\",\n  \"saldoInicial\": 2000,\n  \"estado\": true,\n  \"clienteId\": \"jose.lema\"\n}" }
+          }
+        },
+        {
+          "name": "PATCH Desactivar cuenta",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Estado desactivado', () => pm.expect(pm.response.json().estado).to.be.false);"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/cuentas/{{id_cuenta_495878}}",
+            "body": { "mode": "raw", "raw": "{\n  \"estado\": false\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - F1+F2+F3 Movimientos",
+      "item": [
+        {
+          "name": "GET Listar movimientos",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_cuentas}}/movimientos" }
+        },
+        {
+          "name": "GET Movimiento por ID",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": { "method": "GET", "url": "{{base_cuentas}}/movimientos/1" }
+        },
+        {
+          "name": "POST Deposito (valor positivo)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.test('Tipo es Deposito', () => pm.expect(pm.response.json().tipoMovimiento).to.eql('Deposito'));",
+            "pm.test('Saldo aumentó', () => pm.expect(pm.response.json().saldo).to.be.greaterThan(0));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"585545\",\n  \"valor\": 500\n}" }
+          }
+        },
+        {
+          "name": "POST Retiro (valor negativo)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "pm.test('Tipo es Retiro', () => pm.expect(pm.response.json().tipoMovimiento).to.eql('Retiro'));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"585545\",\n  \"valor\": -200\n}" }
+          }
+        },
+        {
+          "name": "POST Saldo no disponible - F3 (400)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 400', () => pm.response.to.have.status(400));",
+            "pm.test('Mensaje Saldo no disponible', () => pm.expect(pm.response.json().message).to.eql('Saldo no disponible'));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"496825\",\n  \"valor\": -9999\n}" }
+          }
+        },
+        {
+          "name": "POST Cuenta inexistente (404)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 404', () => pm.response.to.have.status(404));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_cuentas}}/movimientos",
+            "body": { "mode": "raw", "raw": "{\n  \"numeroCuenta\": \"000000\",\n  \"valor\": 100\n}" }
+          }
+        },
+        {
+          "name": "DELETE Movimiento",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 204', () => pm.response.to.have.status(204));"
+          ]}}],
+          "request": { "method": "DELETE", "url": "{{base_cuentas}}/movimientos/1" }
+        }
+      ]
+    },
+    {
+      "name": "04 - F4 Reporte Estado de Cuenta",
+      "item": [
+        {
+          "name": "GET Reporte Marianela Montalvo",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Es array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+            "pm.test('Estructura correcta del reporte', () => {",
+            "  const item = pm.response.json()[0];",
+            "  pm.expect(item).to.have.property('fecha');",
+            "  pm.expect(item).to.have.property('cliente');",
+            "  pm.expect(item).to.have.property('numeroCuenta');",
+            "  pm.expect(item).to.have.property('tipo');",
+            "  pm.expect(item).to.have.property('saldoInicial');",
+            "  pm.expect(item).to.have.property('estado');",
+            "  pm.expect(item).to.have.property('movimiento');",
+            "  pm.expect(item).to.have.property('saldoDisponible');",
+            "});"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_cuentas}}/reportes?clienteId=marianela.montalvo&fechaInicio=2026-04-01&fechaFin=2026-12-31",
+              "host": ["{{base_cuentas}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "clienteId",   "value": "marianela.montalvo" },
+                { "key": "fechaInicio", "value": "2026-04-01" },
+                { "key": "fechaFin",    "value": "2026-12-31" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Reporte Jose Lema",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_cuentas}}/reportes?clienteId=jose.lema&fechaInicio=2026-04-01&fechaFin=2026-12-31",
+              "host": ["{{base_cuentas}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "clienteId",   "value": "jose.lema" },
+                { "key": "fechaInicio", "value": "2026-04-01" },
+                { "key": "fechaFin",    "value": "2026-12-31" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Reporte rango sin movimientos (array vacío)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "pm.test('Array vacío para rango sin datos', () => pm.expect(pm.response.json()).to.eql([]));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_cuentas}}/reportes?clienteId=jose.lema&fechaInicio=2000-01-01&fechaFin=2000-01-31",
+              "host": ["{{base_cuentas}}"],
+              "path": ["reportes"],
+              "query": [
+                { "key": "clienteId",   "value": "jose.lema" },
+                { "key": "fechaInicio", "value": "2000-01-01" },
+                { "key": "fechaFin",    "value": "2000-01-31" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
